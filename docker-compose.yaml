@@ -1,0 +1,16 @@
+version: '3'
+
+services: 
+  db:
+    image: mongo:latest
+    restart: always
+    container_name: NEST_MONGO_POKEDEX
+    expose:
+      - 27017
+    environment:
+      MONGODB_DATABASE: nest-pokemon
+    volumes:
+      - ./mongo:/data/db
+      - ./mongo:/data/log:/var/log/mondodb/
+    ports:
+      - "27017:27017"
