@@ -7,11 +7,12 @@ import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ConfigService } from '@nestjs/config';
+import 'dotenv/config';
 
 @Injectable()
 export class PokemonService {
 
-  private defaultLimit: number; 
+  private defaultLimit: number;
 
   constructor(
     
@@ -21,15 +22,9 @@ export class PokemonService {
     private readonly configService: ConfigService,
 
   ) {
-
-    if(this.defaultLimit === undefined){
-      throw new Error(`La variable de configuración ${this.defaultLimit} debe estar definida`);
-    }else{
-      this.defaultLimit = this.configService.get<number>('defaultLimit') ?? 5;
-    }
-
+    const defaultLimit = configService.get<number>('defaultLimit');
+    //console.log({defaultLimit: configService.get<number>('defaultLimit')})
   }
-
 
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -80,6 +75,7 @@ export class PokemonService {
   async update( term: string, updatePokemonDto: UpdatePokemonDto) {
 
     const pokemon = await this.findOne( term );
+
     if ( updatePokemonDto.name )
       updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
     
